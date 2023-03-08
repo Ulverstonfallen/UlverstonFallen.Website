@@ -1,0 +1,2 @@
+Sitemap: https://www.ulverstonfallen.uk/sitemap.xml
+User-agent: *

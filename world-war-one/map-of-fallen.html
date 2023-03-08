@@ -1,0 +1,467 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>1913 Ulverston Map</title>
+        <meta name="description" content="1913 Map of Ulverston showing the location of people killed in action or who died of their wounds during World War I." />
+    <link rel="stylesheet" href="/css/body.13.css" />
+</head>
+
+<body>
+
+    
+<link rel="stylesheet" href="/css/header.13.css" />
+<header>
+
+    <nav class="head-n">
+        <ul>
+                <li><a href="/index">Home</a></li>
+                <li><a href="/world-war-one/roll-of-honour">Roll of Honour</a></li>
+                <li><a href="/gallery">Gallery</a></li>
+                <li><a class="cur" href="/world-war-one/map-of-fallen">Map</a></li>
+                <li><a href="/contact-me" id="contactHead">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="head-i">
+        <img src="/images/header.1.3.2.jpg" alt="Silhouette of soldiers, crosses, poppies and the Ulverston Lighthouse" />
+        <p><span class="black">Ulverston Fallen:</span> <span class="poppy-red">World War I</span></p>
+    </div>
+
+    <div><a name="DetailTop"></a></div>
+</header>
+
+    
+
+
+<link rel="stylesheet" href="/css/page-text.16.css" />
+<section class="info">
+
+    <noscript>
+
+        <h1>Where The Fallen of Ulverston Lived</h1>
+
+        <p>
+            Because Java Script has been disabled, full map functionality is not available. If you enable Java Script for this website you will be
+            able to zoom in/out on the map below, and click a poppy to view the full details of the person associated with the it. Further information
+            about Java Script is available on our <a href="/info#javaScript">info page</a>.
+        </p>
+
+        <img class="img-map" src="/images/ulverstonmap.1.3.1.jpg" alt="1913 Map of Ulverston" />
+
+    </noscript>
+
+    <div id="map-of-fallen-jsmap" style="display: none">
+
+        <div id="fallenDetailLAll">
+            <h1>
+                Where the Fallen of Ulverston Lived (Unfiltered)
+            </h1>
+            <p>
+                The poppies indicate the home of most of the fallen.
+            </p>
+            <p>
+                This zoomable map has not been filtered. Not all the listed fallen have an address that appears on the map.
+            </p>
+        </div>
+
+        <div class="div-display-none" id="fallenDetailLFiltered">
+            <h1>
+                Where the Fallen of Ulverston Lived (Filtered)
+            </h1>
+            <div class="div-display-none" id="fallenDetailDAll">
+                <p>
+                    The poppies indicate the homes of the fallen.
+                </p>
+                <p>
+                    This zoomable map has been filtered to your selection. All the selected fallen have an address that appears on the map.
+                </p>
+            </div>
+            <div id="fallenDetailDSome">
+                <p>
+                    The poppies indicate the home of most of the fallen.
+                </p>
+                <p>
+                    This zoomable map has been filtered to your selection. Not all the selected fallen have an address that appears on the map.
+                </p>
+            </div>
+            <div class="div-display-none" id="fallenDetailDNone">
+                <p>
+                    This zoomable map has been filtered to your selection. None of the selected fallen have an address that appears on the map.
+                </p>
+            </div>
+        </div>
+
+        <link rel="stylesheet" href="/css/leaflet-1-6-0.css" />
+        <div class="leaflet-map" id="map"></div>
+        <div class="leaflet-menu">
+            <p>
+                <a href="#" id="fallenMapReset">Zoom Reset</a>;&nbsp
+                <a href="#" id="gotoFallenDetail1">Fallen List</a>;&nbsp
+                <a href="#" id="mapDisplayHelp">Help</a>
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        var elem = document.getElementById("map-of-fallen-jsmap");
+        elem.style.display = "block";
+    </script>
+
+    <p>
+        Reproduced with the permission of the <a href="https://maps.nls.uk/index.html" target="_blank">National Library of Scotland</a>.
+    </p>
+
+</section>
+
+    
+<link rel="stylesheet" href="/css/footer.14.css" />
+<footer>
+
+    <div class="foot-line"></div>
+
+    <div class="foot-l">
+        <p class="left">Copyright © 2019 Janet Eglin. All Rights Reserved</p>
+        <p class="right"></p>
+        <p class="para">&nbsp;</p>
+    </div>
+
+    <div class="foot-c"></div>
+
+    <nav class="foot-n">
+        <ul>
+                <li><a href="/index">Home</a></li>
+                <li><a href="/world-war-one/roll-of-honour">Roll of Honour</a></li>
+                <li><a href="/gallery">Gallery</a></li>
+                <li><a class="cur" href="/world-war-one/map-of-fallen">Map</a></li>
+                <li><a href="/contact-me" id="contactFoot">Contact</a></li>
+                <li><a href="/info">Info</a></li>
+        </ul>
+    </nav>
+
+</footer>
+
+    <link rel="stylesheet" href="/css/dialog-wait.13.css" />
+    <link rel="stylesheet" href="/css/dialog-contact.13.css" />
+    <link rel="stylesheet" href="/css/dialog-fallen-map.13.css" />
+    <link rel="stylesheet" href="/css/dialog-filter.15.css" />
+    <div id="dialogs"></div>
+    <div class="filterButtons" id="filterButtons">
+        <p class="filter" id="fallenDetailShow">Filter</p>
+    </div>
+    <div id="securso-list" data-list="fallenDetail" data-type="external"></div>
+    <div class="div-display-none" id="mapPopups"></div>
+    <script src="/script/ulverstonfallen.23.js" type="text/javascript"></script>
+    <script src="/script/leaflet-1-6-0.js" type="text/javascript"></script>
+    <script>
+        Securso.List.SetupExtenalFilter(ListInitialDisplay, ListRedisplayBegin, ListRedisplayEnd, ListRedisplayId);
+        WebsiteUlverstonFallen.AddDocumentLoadCompleteProcessing("/html/dialog/map-12.json")
+
+        function ListInitialDisplay() {
+
+            poppy = L.icon({ iconUrl: '/images/ww1-map-1/marker-all.2.png', iconSize: [20, 20], iconAnchor: [10, 10] })
+            map = L.map('map');
+            map.setView([54.19624, -3.09846])
+            map.setZoom(15);
+            L.tileLayer('/images/ww1-map-1/{z}/{x}/{y}.jpg', {
+                minZoom: 15,
+                maxZoom: 18,
+                tms: false,
+                attribution: '',
+                zoomSnap: 0.1,
+                zoomDelta: 0.1
+            }).addTo(map);
+
+            markers = new L.FeatureGroup();
+            popups = document.getElementById('mapPopups');
+            if (popups == null)
+                throw new Error("Ulverston Fallen map page: html element 'mapPopus' does not exist.")
+            var i;
+            for (i = 0; i < points.length; i++) {
+                AddMarker(i);
+            };
+
+            map.addLayer(markers);
+
+            filAll = document.getElementById("fallenAllDisplayed");
+            if (filAll != null)
+                filAll.style.display = "none";
+
+            filSome = document.getElementById("fallenSomeDisplayed");
+            if (filSome != null)
+                filSome.style.display = "block";
+
+            filNone = document.getElementById("fallenNoneDisplayed");
+            if (filNone != null)
+                filNone.style.display = "none";
+
+            el = document.getElementById("fallenMapReset");
+            if (el != null)
+                el.addEventListener("click", MapReset);
+
+            el = document.getElementById("gotoFallenDetail1");
+            if (el != null)
+                el.addEventListener('click', GotoFallenDetail);
+            el = document.getElementById("gotoFallenDetail2");
+            if (el != null)
+                el.addEventListener('click', GotoFallenDetail);
+            el = document.getElementById("gotoFallenDetail3");
+            if (el != null)
+                el.addEventListener('click', GotoFallenDetail);
+        }
+
+        // --------------------------------------
+
+        function ListRedisplayBegin() {
+            while (l = popups.LastChild) {
+                popups.removeChild(l);
+            }
+            map.removeLayer(markers);
+            markers = new L.FeatureGroup();
+            missCnt = 0;
+            fullCnt = 0;
+        }
+
+        function ListRedisplayEnd() {
+
+            map.addLayer(markers);
+            map.setView(new L.LatLng(54.19624, -3.09846), 15);
+        }
+
+        function ListRedisplayId(id) {
+            if (typeof id == 'number') {
+                fullCnt = fullCnt + 1;
+                i = 0;
+                j = -1;
+                l = points.length;
+                for (; i < l; i++) {
+                    if (points[i][0] == id) {
+                        j = i;
+                        break;
+                    }
+                }
+                if (j >= 0) {
+                    AddMarker(j);
+                    return true;
+                }
+                else {
+                    missCnt = missCnt + 1;
+                    return false;
+                }
+            }
+
+        }
+
+        // --------------------------------------
+
+        function AddMarker(i) {
+            var ind = i.toString();
+            var s = '<div class="leaflet-map-popup" id="pop-' + ind + '"><p><a href="#" id="fds-' + ind + '">' + points[i][3] + '</a></p></div>';
+            popups.insertAdjacentHTML('beforeend', s);
+            pxy = document.getElementById('pop-' + ind.toString());
+            if (pxy != null) {
+                var pup = L.popup();
+                pup.setContent(pxy);
+                points[i][4] = pup;
+            }
+            else {
+                points[i][4] = null;
+            }
+            var marker = L.marker([points[i][1], points[i][2]], { icon: poppy });
+            marker.bindPopup(pup);
+            markers.addLayer(marker);
+            pxy = document.getElementById('fds-' + ind);
+            if (pxy != null)
+               pxy.addEventListener('click', ShowDetail);
+        }
+
+        function MapReset(e) {
+            e.preventDefault();
+            map.setView(new L.LatLng(54.19624, -3.09846), 15);
+        }
+
+        function ShowDetail(e) {
+            e.preventDefault();
+            var i = Securso.ConvertStringToInteger(e.target.id.substring(4));
+            var dialog = Securso.ModalDialog.GetModalDialog('ajaxDetail');
+            dialog.ShowWithAjaxDetail(points[i][0]);
+            map.closePopup();
+        }
+
+        function GotoFallenDetail(e) {
+
+            e.preventDefault();
+            var list = Securso.List.GetListByName('fallenDetail');
+            if (list.Filtered)
+                window.location.replace('/world-war-one/fallen/akister-john-pioneer?applyFilter');
+            else
+                window.location.replace('/world-war-one/fallen/akister-john-pioneer');
+        }
+
+        // --------------------------------------
+
+        var map;
+        var markers;
+        var poppy;
+        var popups;
+        var filAll;
+        var filSome;
+        var filNone;
+        var missCnt = 0;
+        var fullCnt = 0;
+        var points = [
+            ["1", 54.19604, -3.09296, "Pioneer John Akister", null],
+            ["2", 54.19911, -3.09862, "Private Albert Askew", null],
+            ["3", 54.19541, -3.08765, "Private Nelson Athersmith", null],
+            ["5", 54.19794, -3.09660, "Private Isaac Atkinson", null],
+            ["6", 54.19386, -3.08824, "Private John Atkinson", null],
+            ["8", 54.19574, -3.08414, "Private Joseph Balderstone", null],
+            ["10", 54.19689, -3.08763, "Lance Sergeant John Edward Banks", null],
+            ["11", 54.19708, -3.08796, "Private James Barnwell", null],
+            ["12", 54.19708, -3.08805, "Private Septimus Barnwell", null],
+            ["13", 54.19566, -3.08748, "Sergeant James Barrow", null],
+            ["16", 54.19860, -3.09589, "Regimental Sergeant Major John William Bell", null],
+            ["17", 54.19916, -3.09622, "Private Joseph Dixon Bell", null],
+            ["18", 54.19482, -3.08761, "Private Walter Bell", null],
+            ["19", 54.20011, -3.09762, "Gunner William Thomas Bell", null],
+            ["20", 54.19606, -3.09356, "Private Roger Bevins", null],
+            ["21", 54.19647, -3.09405, "Private William Bevins", null],
+            ["24", 54.19377, -3.08827, "Rifleman James Blezard", null],
+            ["25", 54.19379, -3.08832, "Private Thomas Blezard", null],
+            ["27", 54.19583, -3.09793, "Private George Bottoms", null],
+            ["28", 54.19722, -3.09726, "Private William James Bottoms", null],
+            ["29", 54.19730, -3.09734, "Private James Bowman", null],
+            ["30", 54.19317, -3.09658, "Lieutenant Leslie Spencer Bowman", null],
+            ["33", 54.19605, -3.09356, "Private William Edmund Bushby", null],
+            ["34", 54.19933, -3.09741, "Private James Butterfield", null],
+            ["35", 54.19584, -3.09120, "Lance Sergeant Matthew Caddy", null],
+            ["36", 54.19735, -3.08854, "Lance Corporal George Capstick", null],
+            ["37", 54.20019, -3.08768, "2nd Lieutenant George Ronald Ashburner Case", null],
+            ["38", 54.19613, -3.08565, "Corporal Reveley Cavin", null],
+            ["39", 54.18912, -3.08896, "Private Arthur Chadwick", null],
+            ["40", 54.19721, -3.08940, "Private Walter Chadwick", null],
+            ["41", 54.19538, -3.08764, "Corporal Thomas Postlethwaite Chorley", null],
+            ["42", 54.19685, -3.08689, "Private William James Chorley", null],
+            ["43", 54.19265, -3.09633, "Private Joseph Bell Clayton", null],
+            ["44", 54.19961, -3.08301, "Lance Corporal John Cloudsdale", null],
+            ["45", 54.19955, -3.08300, "Private Thomas Cloudsdale", null],
+            ["46", 54.19377, -3.09068, "Private Robert Cockerton", null],
+            ["47", 54.19552, -3.08555, "Private William Edward Cole", null],
+            ["48", 54.19452, -3.08751, "Private John Richard Bibby Cook", null],
+            ["49", 54.18912, -3.08882, "Private William Cottam", null],
+            ["50", 54.19199, -3.09132, "Lance Sergeant Harry Cottrell", null],
+            ["51", 54.19475, -3.09060, "Private Thomas Coulong", null],
+            ["52", 54.19560, -3.09246, "Private Walter Coward", null],
+            ["53", 54.19558, -3.09240, "Private William Dyson Coward", null],
+            ["54", 54.19325, -3.09125, "Artificer Robert Walton Crawford", null],
+            ["57", 54.19777, -3.09855, "Lance Corporal Edward Dickinson", null],
+            ["59", 54.19358, -3.08845, "Private James Downham", null],
+            ["60", 54.19757, -3.09506, "Private Thomas Chevalier Dunkerley", null],
+            ["62", 54.19640, -3.08673, "Private William Thomas Anderson Fell", null],
+            ["65", 54.19845, -3.09259, "Lieutenant Eric Graham Fletcher", null],
+            ["66", 54.19780, -3.09602, "Lance Corporal William Richardson Forbes", null],
+            ["67", 54.19678, -3.09075, "Private Harold Gardner", null],
+            ["68", 54.19684, -3.09500, "Private Tom Gardner", null],
+            ["69", 54.19463, -3.09070, "Private Albert Hugh Garnett", null],
+            ["70", 54.19659, -3.08617, "Private Robert Garnett", null],
+            ["71", 54.19322, -3.09144, "Corporal Frank Garside", null],
+            ["72", 54.19987, -3.09739, "Private William Gibson", null],
+            ["73", 54.19364, -3.08928, "Corporal George Gorman", null],
+            ["74", 54.19881, -3.09594, "2nd Lieutenant Edwin Hadath", null],
+            ["75", 54.20152, -3.09726, "Private Edwin Hamblett", null],
+            ["76", 54.19666, -3.09467, "Private Thomas F G Harrison", null],
+            ["78", 54.19618, -3.09410, "Private Albert Henry Hetherington", null],
+            ["79", 4.201000, -3.08859, "Captain Charles Richardson Hird", null],
+            ["80", 54.19930, -3.09801, "Corporal James Hird", null],
+            ["81", 54.1958, -3.09614, "Private Joseph Hird", null],
+            ["82", 54.19585, -3.09776, "Private George Hodgson", null],
+            ["83", 54.19645, -3.08857, "Private Joseph Holmes", null],
+            ["84", 54.19917, -3.08314, "Corporal Joseph Bateman Holmes", null],
+            ["85", 54.19921, -3.08320, "Private Myles Bateman Holmes", null],
+            ["86", 54.19711, -3.08668, "Private John Robinson Hughes", null],
+            ["90", 54.18904, -3.08894, "Sergeant George Inman", null],
+            ["91", 54.18904, -3.08875, "Lance Sergeant William Steele Inman", null],
+            ["92", 54.19657, -3.09136, "Lance Corporal John William Ireland", null],
+            ["93", 54.19429, -3.09041, "Private William Joseph Ireland", null],
+            ["94", 54.19526, -3.09200, "Private John Jackson", null],
+            ["95", 54.19530, -3.09196, "Private Robert Jackson", null],
+            ["96", 54.19730, -3.08673, "Private John Herbert Jenkinson", null],
+            ["98", 54.19659, -3.08576, "Lance Corporal Joseph Jewell", null],
+            ["99", 54.19656, -3.08573, "Private Thomas Hatton Jewell", null],
+            ["100", 54.19678, -3.09693, "Private Percy Johnson", null],
+            ["101", 54.19425, -3.08846, "Private Joseph Johnston", null],
+            ["102", 54.19580, -3.09259, "Driver Joseph Thomas Jones", null],
+            ["103", 54.19699, -3.09154, "Private Thomas Park Jones", null],
+            ["104", 54.1988, -3.09356, "Private Albert Kay", null],
+            ["105", 54.19170, -3.09152, "2nd Lieutenant Thomas Linaker Kendall", null],
+            ["106", 54.19768, -3.09904, "Corporal Henry Herbert Kitchen", null],
+            ["107", 54.19824, -3.09736, "Private Alfred Kitching", null],
+            ["109", 54.19932, -3.09765, "Lance Corporal Albert Edward Lewis", null],
+            ["110", 54.19695, -3.09462, "Corporal Charles Norman Lewis", null],
+            ["112", 54.19473, -3.09062, "Private William Long", null],
+            ["113", 54.19664, -3.08612, "Lance Corporal Albert MacKintosh", null],
+            ["114", 54.19659, -3.08608, "Lance Corporal Archibald MacKintosh", null],
+            ["115", 54.19736, -3.08784, "Private Walter Mason", null],
+            ["116", 54.19669, -3.08591, "Private James McAlarney", null],
+            ["117", 54.19584, -3.09802, "Private Peter McNicholas", null],
+            ["120", 54.19810, -3.09517, "Private Edwin Myers", null],
+            ["121", 54.19606, -3.09506, "Corporal Frank Nelson", null],
+            ["122", 54.19517, -3.08763, "Lance Corporal Edward Nevinson", null],
+            ["124", 54.19171, -3.09137, "Private Joseph William Nicholson", null],
+            ["125", 54.19695, -3.08579, "Private Robert Oversby", null],
+            ["126", 54.19676, -3.08761, "Lance Corporal John Reginald Park", null],
+            ["127", 54.19478, -3.08761, "Private Thomas Park", null],
+            ["128", 54.19206, -3.09066, "Private Richard Phillips", null],
+            ["129", 54.19662, -3.08991, "Lance Corporal Frank Porter", null],
+            ["130", 54.19709, -3.08712, "Private James Edward Porter", null],
+            ["131", 54.19740, -3.09240, "Private John Procter", null],
+            ["132", 54.19640, -3.09051, "Private Henry Robt Rayment", null],
+            ["133", 54.19216, -3.08966, "Private Carl Henderson Robinson", null],
+            ["134", 54.20017, -3.09767, "Private Ernest Robinson", null],
+            ["135", 54.19764, -3.09566, "Private John Noel Robinson", null],
+            ["136", 54.19964, -3.08258, "Private Fred M Ross", null],
+            ["137", 54.19958, -3.09574, "Corporal David George Rowlandson", null],
+            ["138", 54.19498, -3.09692, "Private George Warrior Ryland", null],
+            ["139", 54.19862, -3.09687, "Private Albert Ernest Sharp", null],
+            ["140", 54.19794, -3.09701, "Sergeant James Shaw", null],
+            ["141", 54.19686, -3.08883, "Private William Shaw", null],
+            ["142", 54.19545, -3.09329, "Lance Corporal Fred Shepherd", null],
+            ["143", 54.19780, -3.09866, "Private John Richard Shepherd", null],
+            ["144", 54.19486, -3.08762, "Private James Smith", null],
+            ["145", 54.19574, -3.09049, "Private Joseph Smith", null],
+            ["146", 54.19641, -3.08854, "Private Thomas Smith", null],
+            ["147", 54.19703, -3.08742, "Private Harry Snaith", null],
+            ["148", 54.19741, -3.08804, "Sergeant Roger Linton Steel", null],
+            ["150", 54.19476, -3.09228, "Private William Stewart", null],
+            ["151", 54.19679, -3.09572, "Private John Taylor", null],
+            ["152", 54.19975, -3.09212, "Sergeant Leslie Clifford Taylor", null],
+            ["153", 54.19080, -3.08292, "Private Wallace Thompson", null],
+            ["154", 54.19076, -3.08288, "Private Walter Thompson", null],
+            ["155", 54.19402, -3.09178, "Sergeant James Tindall", null],
+            ["157", 54.19781, -3.09859, "Private George Frederick Tyer", null],
+            ["158", 54.19592, -3.09816, "Private James Vickers", null],
+            ["159", 54.19842, -3.09270, "Corporal Jonah Mawson Walker", null],
+            ["160", 54.19601, -3.09758, "Company Sergeant Major George Waring", null],
+            ["161", 54.20081, -3.09646, "Sister Tamar Watson", null],
+            ["162", 54.19526, -3.08764, "Private Thomas Watts", null],
+            ["163", 54.19965, -3.0826, "Private William Watts", null],
+            ["165", 54.19674, -3.08875, "Private James Whiteway", null],
+            ["166", 54.19032, -3.09928, "2nd Lieutenant Benjamin Heywood Whitley", null],
+            ["167", 54.19477, -3.09076, "Private Thomas Wilkinson", null],
+            ["168", 54.19765, -3.08530, "Private Fred Williams", null],
+            ["169", 54.19857, -3.09588, "Lance Corporal John Wilson", null],
+            ["170", 54.19355, -3.08845, "Private John James Witham", null],
+            ["171", 54.19686, -3.09713, "Private Frederick Woodburn", null],
+            ["172", 54.19544, -3.09170, "Private Thomas Woodward", null],
+            ["173", 54.19738, -3.08619, "Private Thomas Wright", null],
+            ["174", 54.19868, -3.09591, "Private Cecil Bagnall Young", null],
+            ["175", 54.19576, -3.08770, "Private William Henry Young", null]
+        ];
+    </script>
+
+</body>
+</html>
